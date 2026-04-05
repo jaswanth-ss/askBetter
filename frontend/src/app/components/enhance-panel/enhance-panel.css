@@ -348,6 +348,25 @@
   color: var(--text-secondary);
 }
 
+.resource-links-wrap {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin-top: 4px;
+  padding-top: 12px;
+  border-top: 1px solid var(--border);
+}
+
+.resource-links-label {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--text-secondary);
+}
+
+.other-input {
+  animation: expandIn 0.18s ease;
+}
+
 .modal-footer {
   display: flex;
   align-items: center;

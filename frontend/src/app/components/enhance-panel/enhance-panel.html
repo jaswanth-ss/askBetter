@@ -50,11 +50,19 @@
             @for (level of experienceLevels; track level) {
               <button
                 class="pill-opt"
-                [class.selected]="isSelected('experienceLevel', level)"
-                (click)="select('experienceLevel', level)"
+                [class.selected]="isSelected('userExperienceLevel', level)"
+                (click)="select('userExperienceLevel', level)"
               >{{ level }}</button>
             }
           </div>
+          @if (isOtherSelected('userExperienceLevel')) {
+            <input
+              class="text-input other-input"
+              type="text"
+              [(ngModel)]="otherText.userExperienceLevel"
+              placeholder="Describe your experience level..."
+            />
+          }
         </div>
 
         <div class="form-section">
@@ -71,6 +79,14 @@
               >{{ fmt }}</button>
             }
           </div>
+          @if (isOtherSelected('responseFormat')) {
+            <input
+              class="text-input other-input"
+              type="text"
+              [(ngModel)]="otherText.responseFormat"
+              placeholder="Describe the format you need..."
+            />
+          }
         </div>
 
         <div class="form-section">
@@ -82,11 +98,19 @@
             @for (p of purposes; track p) {
               <button
                 class="pill-opt"
-                [class.selected]="isSelected('purpose', p)"
-                (click)="select('purpose', p)"
+                [class.selected]="isSelected('reasonForAsking', p)"
+                (click)="select('reasonForAsking', p)"
               >{{ p }}</button>
             }
           </div>
+          @if (isOtherSelected('reasonForAsking')) {
+            <input
+              class="text-input other-input"
+              type="text"
+              [(ngModel)]="otherText.reasonForAsking"
+              placeholder="Describe your purpose..."
+            />
+          }
         </div>
 
         <div class="form-section">
@@ -98,11 +122,19 @@
             @for (t of tones; track t) {
               <button
                 class="pill-opt"
-                [class.selected]="isSelected('tone', t)"
-                (click)="select('tone', t)"
+                [class.selected]="isSelected('preferredTone', t)"
+                (click)="select('preferredTone', t)"
               >{{ t }}</button>
             }
           </div>
+          @if (isOtherSelected('preferredTone')) {
+            <input
+              class="text-input other-input"
+              type="text"
+              [(ngModel)]="otherText.preferredTone"
+              placeholder="Describe the tone you prefer..."
+            />
+          }
         </div>
 
         <div class="form-section">
@@ -114,11 +146,19 @@
             @for (l of lengths; track l) {
               <button
                 class="pill-opt"
-                [class.selected]="isSelected('length', l)"
-                (click)="select('length', l)"
+                [class.selected]="isSelected('responseLength', l)"
+                (click)="select('responseLength', l)"
               >{{ l }}</button>
             }
           </div>
+          @if (isOtherSelected('responseLength')) {
+            <input
+              class="text-input other-input"
+              type="text"
+              [(ngModel)]="otherText.responseLength"
+              placeholder="Describe the length you prefer..."
+            />
+          }
         </div>
 
         <div class="form-section">
@@ -128,14 +168,14 @@
               <p class="toggle-desc">Should the AI reference external sources for a richer answer?</p>
             </div>
             <label class="toggle-switch">
-              <input type="checkbox" [(ngModel)]="data.useResources" />
+              <input type="checkbox" [(ngModel)]="useResources" />
               <span class="toggle-track">
                 <span class="toggle-thumb"></span>
               </span>
             </label>
           </div>
 
-          @if (data.useResources) {
+          @if (useResources) {
             <div class="resource-types">
               <p class="resource-label">Select resource types</p>
               <div class="pill-group">
@@ -146,6 +186,15 @@
                     (click)="toggleResource(r)"
                   >{{ r }}</button>
                 }
+              </div>
+              <div class="resource-links-wrap">
+                <label class="resource-links-label">Specific links or references</label>
+                <input
+                  class="text-input"
+                  type="text"
+                  [(ngModel)]="resourceLinks"
+                  placeholder="https://example.com, https://docs.example.com..."
+                />
               </div>
             </div>
           }

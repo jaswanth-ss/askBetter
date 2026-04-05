@@ -22,7 +22,7 @@ class ContextItem(BaseModel):
     reason_for_asking: str
     preferred_tone: str
     response_length: str
-    user_external_resources: str
+    use_external_resources: str
     additional_context: str
 
 
@@ -48,7 +48,7 @@ Context:
     reason_for_asking: {request.context.reason_for_asking}
     preferred_tone: {request.context.preferred_tone}
     response_length: {request.context.response_length}
-    user_external_resources: {request.context.user_external_resources}
+    user_external_resources: {request.context.use_external_resources}
     additional_context: {request.context.additional_context}"""
     else:
         user_message = request.prompt
@@ -71,6 +71,7 @@ While rewriting, follow these rules:
 - Do not add any new or unnecessary information
 - Ensure the prompt is clear, specific, and well-structured
 - Keep the prompt concise — neither too long nor too short
+- Check for and correct any grammatical errors or ambiguities
 
 Return only the improved prompt, without any explanations or additional text."""
                 },
