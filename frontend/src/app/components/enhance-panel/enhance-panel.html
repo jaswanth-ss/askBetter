@@ -1,0 +1,182 @@
+@if (visible()) {
+  <div class="modal-backdrop" (click)="onClose()">
+    <div class="enhance-modal" (click)="$event.stopPropagation()">
+
+      <div class="modal-top-bar"></div>
+
+      <div class="modal-header">
+        <div class="modal-header-left">
+          <div class="modal-icon">✦</div>
+          <div>
+            <h2 class="modal-title">Refine Your Prompt</h2>
+            <p class="modal-subtitle">Help us craft the perfect response for you</p>
+          </div>
+        </div>
+        <button class="close-btn" (click)="onClose()" aria-label="Close">
+          <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
+            <path d="M11 3L3 11M3 3l8 8" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+          </svg>
+        </button>
+      </div>
+
+      @if (prompt()) {
+        <div class="prompt-preview">
+          <span class="preview-label">Your prompt</span>
+          <p class="preview-text">{{ prompt() }}</p>
+        </div>
+      }
+
+      <div class="modal-body">
+
+        <div class="form-section">
+          <label class="section-label">
+            <span class="label-num">1</span>
+            Topic or Subject
+          </label>
+          <input
+            class="text-input"
+            type="text"
+            [(ngModel)]="data.topic"
+            placeholder="e.g. Quantum computing, Renaissance art, Machine learning..."
+          />
+        </div>
+
+        <div class="form-section">
+          <label class="section-label">
+            <span class="label-num">2</span>
+            Your Experience Level
+          </label>
+          <div class="pill-group">
+            @for (level of experienceLevels; track level) {
+              <button
+                class="pill-opt"
+                [class.selected]="isSelected('experienceLevel', level)"
+                (click)="select('experienceLevel', level)"
+              >{{ level }}</button>
+            }
+          </div>
+        </div>
+
+        <div class="form-section">
+          <label class="section-label">
+            <span class="label-num">3</span>
+            Response Format
+          </label>
+          <div class="pill-group">
+            @for (fmt of responseFormats; track fmt) {
+              <button
+                class="pill-opt"
+                [class.selected]="isSelected('responseFormat', fmt)"
+                (click)="select('responseFormat', fmt)"
+              >{{ fmt }}</button>
+            }
+          </div>
+        </div>
+
+        <div class="form-section">
+          <label class="section-label">
+            <span class="label-num">4</span>
+            What is this prompt for?
+          </label>
+          <div class="pill-group">
+            @for (p of purposes; track p) {
+              <button
+                class="pill-opt"
+                [class.selected]="isSelected('purpose', p)"
+                (click)="select('purpose', p)"
+              >{{ p }}</button>
+            }
+          </div>
+        </div>
+
+        <div class="form-section">
+          <label class="section-label">
+            <span class="label-num">5</span>
+            Preferred Tone
+          </label>
+          <div class="pill-group">
+            @for (t of tones; track t) {
+              <button
+                class="pill-opt"
+                [class.selected]="isSelected('tone', t)"
+                (click)="select('tone', t)"
+              >{{ t }}</button>
+            }
+          </div>
+        </div>
+
+        <div class="form-section">
+          <label class="section-label">
+            <span class="label-num">6</span>
+            Response Length
+          </label>
+          <div class="pill-group">
+            @for (l of lengths; track l) {
+              <button
+                class="pill-opt"
+                [class.selected]="isSelected('length', l)"
+                (click)="select('length', l)"
+              >{{ l }}</button>
+            }
+          </div>
+        </div>
+
+        <div class="form-section">
+          <div class="toggle-row">
+            <div class="toggle-label-group">
+              <label class="section-label no-num">Use External Resources</label>
+              <p class="toggle-desc">Should the AI reference external sources for a richer answer?</p>
+            </div>
+            <label class="toggle-switch">
+              <input type="checkbox" [(ngModel)]="data.useResources" />
+              <span class="toggle-track">
+                <span class="toggle-thumb"></span>
+              </span>
+            </label>
+          </div>
+
+          @if (data.useResources) {
+            <div class="resource-types">
+              <p class="resource-label">Select resource types</p>
+              <div class="pill-group">
+                @for (r of resourceOptions; track r) {
+                  <button
+                    class="pill-opt"
+                    [class.selected]="isResourceSelected(r)"
+                    (click)="toggleResource(r)"
+                  >{{ r }}</button>
+                }
+              </div>
+            </div>
+          }
+        </div>
+
+        <div class="form-section">
+          <label class="section-label">
+            <span class="label-num">7</span>
+            Additional Context
+            <span class="optional-badge">optional</span>
+          </label>
+          <textarea
+            class="text-input textarea-sm"
+            [(ngModel)]="data.additionalContext"
+            placeholder="Any specific requirements, constraints, or context that would help..."
+            rows="3"
+          ></textarea>
+        </div>
+
+      </div>
+
+      <div class="modal-footer">
+        <button class="btn-cancel" (click)="onClose()">Cancel</button>
+        <button class="btn-enhance" (click)="onSend()">
+          <span>Enhance &amp; Send</span>
+          <svg width="15" height="15" viewBox="0 0 15 15" fill="none">
+            <path d="M2.5 7.5h10M8.5 3.5l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </button>
+      </div>
+
+    </div>
+  </div>
+}
