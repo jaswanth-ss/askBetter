@@ -54,6 +54,8 @@ ENV/
 *.sqlite3
 instance/
 pip-log.txt
+python-service/deploy.zip
+python-service/.deployment
 
 # ─── OS ───────────────────────────────────────────────────────────────────────
 .DS_Store
