@@ -26,7 +26,7 @@ backend/*.pubxml.user
 backend/**/*.pubxml.user
 backend/.env
 backend/**/*.env.*
-
+backend/app.zip
 # ─── Python / FastAPI ─────────────────────────────────────────────────────────
 __pycache__/
 *.py[cod]
