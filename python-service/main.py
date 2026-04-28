@@ -30,6 +30,9 @@ class PromptRequest(BaseModel):
     prompt: str
     context: Optional[ContextItem] = None
 
+class SuggestPromptRequest(BaseModel):
+    prompts: str
+
 @app.get("/")
 async def read_root():
     return {"message": "Welcome to the askBetter API"}
@@ -86,3 +89,31 @@ Return only the improved prompt, without any explanations or additional text."""
 
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
+    
+@app.post("/suggest-prompt")
+async def suggest_prompt(request: SuggestPromptRequest):
+    if not request.prompts:
+        return {"error": "Prompts are required"}
+
+    try:
+        chat_completion = client.chat.completions.create(
+            model="llama-3.3-70b-versatile",
+            messages=[
+                {
+                    "role": "system",
+                    "content": """Act as an expert prompt engineer. Your role is to analyze the user's original prompts and provide suggestions for improving them. You may receive input as multiple prompts from a chat session separated by &&&. Understand what is the reason for user to ask the next prompt.Understand what the LLM might be missing that led user to ask the next prompt and suggest a prompt that addresses all the needs of user. Analyze all the prompts and understand what the user is trying to achieve and recreate the prompt that best captures their intent. Focus on identifying any missing details, ambiguities, or areas where the prompt could be more specific. Your suggestions should help the user enhance the quality and clarity of their prompts for better responses from large language models.
+                    
+                    Return only the suggested prompt, without any explanations or additional text."""
+                },
+                {
+                    "role": "user",
+                    "content": request.prompts
+                }
+            ]
+        )
+        suggested_prompt = chat_completion.choices[0].message.content
+        return {"suggested_prompt": suggested_prompt}
+    
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+        
