@@ -109,9 +109,28 @@ async def suggest_prompt(request: SuggestPromptRequest):
             messages=[
                 {
                     "role": "system",
-                    "content": """Act as an expert prompt engineer. Your role is to analyze the user's original prompts and provide suggestions for improving them. You may receive input as multiple prompts from a chat session separated by &&&. Understand what is the reason for user to ask the next prompt.Understand what the LLM might be missing that led user to ask the next prompt and suggest a prompt that addresses all the needs of user. Analyze all the prompts and understand what the user is trying to achieve and recreate the prompt that best captures their intent. Focus on identifying any missing details, ambiguities, or areas where the prompt could be more specific. Your suggestions should help the user enhance the quality and clarity of their prompts for better responses from large language models.
-                    
-                    Return only the suggested prompt, without any explanations or additional text."""
+                    "content": """Act as an expert prompt engineer and intent analyst. Your task is to analyze a sequence of user prompts separated by &&& and reconstruct a single, highly effective prompt that best represents the user’s true underlying intent.
+
+                    Step 1: Identify the explicit request in each prompt (what the user is directly asking).
+                    Step 2: Infer the implicit intent behind the sequence (what the user is really trying to achieve, such as career guidance, confidence building, decision-making, or skill improvement).
+                    Step 3: Detect missing context that would materially improve the quality of an LLM response, including but not limited to:
+
+                    user experience level (assumed or required for specificity)
+                    domain or role context
+                    end goal or outcome the user is aiming for
+                    constraints (time, competition, job market, tools, etc.)
+                    emotional or motivational factors if relevant to intent clarity (e.g., uncertainty, career anxiety, transition pressure)
+
+                    Step 4: Resolve ambiguity by converting vague terms into concrete, actionable framing without making unsupported assumptions.
+
+                    Step 5: Rewrite a single optimized prompt that:
+
+                    preserves original meaning
+                    integrates inferred intent and missing context
+                    improves specificity, clarity, and actionability
+                    is structured in a way that produces high-quality, tailored LLM responses
+
+                    The final output must be a single refined prompt only. Do not include explanations, reasoning, or meta commentary."""
                 },
                 {
                     "role": "user",
