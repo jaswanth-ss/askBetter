@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <style>
+      *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+      :root {
+        --bg: #080808;
+        --surface: #0f0f0f;
+        --surface-2: #161616;
+        --border: #242424;
+        --border-hover: #333333;
+        --text: #f5f5f5;
+        --text-secondary: #999;
+        --text-muted: #555;
+        --accent-gradient: linear-gradient(135deg, #ea580c, #f97316, #fb923c);
+      }
+
+      body {
+        width: 320px;
+        background: var(--bg);
+        color: var(--text);
+        font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+        -webkit-font-smoothing: antialiased;
+      }
+
+      .header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 14px 16px;
+        border-bottom: 1px solid var(--border);
+      }
+
+      .logo { font-size: 16px; font-weight: 700; letter-spacing: -0.03em; }
+      .logo-ask { color: var(--text); }
+      .logo-better {
+        background: var(--accent-gradient);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+      }
+
+      .badge {
+        font-size: 10px;
+        font-weight: 600;
+        color: var(--text-muted);
+        background: var(--surface-2);
+        border: 1px solid var(--border);
+        border-radius: 100px;
+        padding: 3px 10px;
+        letter-spacing: 0.04em;
+        text-transform: uppercase;
+      }
+
+      .main { padding: 16px; display: flex; flex-direction: column; gap: 12px; }
+
+      .card {
+        background: var(--surface);
+        border: 1px solid var(--border);
+        border-radius: 14px;
+        overflow: hidden;
+      }
+
+      .card-body {
+        padding: 14px 16px;
+        font-size: 12px;
+        color: var(--text-secondary);
+        line-height: 1.5;
+      }
+
+      .card-footer {
+        padding: 10px 16px;
+        border-top: 1px solid var(--border);
+        background: var(--surface-2);
+      }
+
+      .btn-primary {
+        width: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+        padding: 10px;
+        border: none;
+        border-radius: 10px;
+        background: var(--accent-gradient);
+        color: #fff;
+        font-size: 13px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: opacity 0.15s, transform 0.15s;
+        font-family: inherit;
+      }
+
+      .btn-primary:not(:disabled):hover { opacity: 0.9; transform: translateY(-1px); }
+      .btn-primary:disabled { opacity: 0.45; cursor: not-allowed; }
+
+      .spinner {
+        width: 12px; height: 12px;
+        border: 2px solid rgba(255,255,255,0.3);
+        border-top-color: #fff;
+        border-radius: 50%;
+        animation: spin 0.7s linear infinite;
+      }
+
+      @keyframes spin { to { transform: rotate(360deg); } }
+
+      #status {
+        font-size: 12px;
+        color: var(--text-muted);
+        text-align: center;
+        min-height: 14px;
+      }
+      #status.error { color: #f87171; }
+
+      .result-card {
+        background: var(--surface);
+        border: 1px solid var(--border);
+        border-radius: 14px;
+        overflow: hidden;
+        animation: fadeUp 0.25s ease;
+      }
+
+      @keyframes fadeUp {
+        from { opacity: 0; transform: translateY(6px); }
+        to   { opacity: 1; transform: translateY(0); }
+      }
+
+      .result-glow { height: 2px; background: var(--accent-gradient); }
+
+      .result-header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 10px 14px;
+        border-bottom: 1px solid var(--border);
+      }
+
+      .result-label {
+        font-size: 10px;
+        font-weight: 700;
+        color: var(--text-secondary);
+        text-transform: uppercase;
+        letter-spacing: 0.07em;
+      }
+
+      .result-actions { display: flex; gap: 6px; }
+
+      .btn-sm {
+        display: flex;
+        align-items: center;
+        gap: 5px;
+        padding: 5px 10px;
+        border: 1px solid var(--border);
+        border-radius: 7px;
+        background: transparent;
+        color: var(--text-secondary);
+        font-size: 11px;
+        font-weight: 500;
+        cursor: pointer;
+        transition: all 0.15s;
+        font-family: inherit;
+      }
+
+      .btn-sm:hover { background: var(--surface-2); color: var(--text); border-color: var(--border-hover); }
+      .btn-sm.copied { border-color: rgba(52,211,153,0.4); color: #34d399; background: rgba(52,211,153,0.06); }
+
+      .result-body { padding: 14px; max-height: 200px; overflow-y: auto; }
+      .result-text { font-size: 13px; color: var(--text); line-height: 1.7; white-space: pre-wrap; word-break: break-word; }
+
+      ::-webkit-scrollbar { width: 4px; }
+      ::-webkit-scrollbar-thumb { background: var(--border-hover); border-radius: 3px; }
+    </style>
+  </head>
+  <body>
+    <header class="header">
+      <div class="logo"><span class="logo-ask">ask</span><span class="logo-better">Better</span></div>
+      <div class="badge">Extension</div>
+    </header>
+
+    <main class="main">
+      <div class="card">
+        <div class="card-body">Reads your ChatGPT conversation and suggests what you were really trying to ask.</div>
+        <div class="card-footer">
+          <button class="btn-primary" id="suggestBtn">
+            <svg width="13" height="13" viewBox="0 0 16 16" fill="none">
+              <path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+            Analyse &amp; Suggest
+          </button>
+        </div>
+      </div>
+
+      <div id="status"></div>
+
+      <div id="resultCard" style="display:none" class="result-card">
+        <div class="result-glow"></div>
+        <div class="result-header">
+          <span class="result-label">✦ Suggested Prompt</span>
+          <div class="result-actions">
+            <button class="btn-sm" id="copyBtn">Copy</button>
+            <button class="btn-sm" id="newBtn">New</button>
+          </div>
+        </div>
+        <div class="result-body">
+          <p class="result-text" id="resultText"></p>
+        </div>
+      </div>
+    </main>
+
+    <script src="popup.js"></script>
+  </body>
+</html>
